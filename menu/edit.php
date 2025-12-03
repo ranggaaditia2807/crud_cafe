@@ -1,0 +1,73 @@
+<?php
+include '../config/koneksi.php';
+$id = $_GET['id'];
+$result = mysqli_query($koneksi, "SELECT * FROM menu WHERE id = '$id'");
+$data = mysqli_fetch_assoc($result);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $nama_menu = $_POST['nama_menu'];
+  $harga = $_POST['harga'];
+  $deskripsi = $_POST['deskripsi'];
+  $stok = $_POST['stok'];
+
+  $update = mysqli_query($koneksi, "UPDATE menu SET nama_menu='$nama_menu', harga='$harga', deskripsi='$deskripsi', stok='$stok' WHERE id='$id'");
+
+  if ($update) {
+    echo "<script>alert('Data berhasil diupdate!'); window.location.href='index.php';</script>";
+  } else {
+    echo "<script>alert('Data gagal diupdate!'); window.location.href='index.php';</script>";
+  }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Data Pemilik</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .form-container {
+      padding: 40px;
+      max-width: 700px;
+      margin: 60px auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: bold;
+      color: rgb(30, 58, 138);
+    }
+  </style>
+</head>
+
+<body>
+<div class="form-container">
+  <h2>Edit Data Menu</h2>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Nama Menu</label>
+      <input type="text" name="nama_menu" class="form-control" value="<?php echo $data['nama_menu']; ?>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Harga</label>
+      <input type="number" name="harga" class="form-control" value="<?php echo $data['harga']; ?>" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Deskripsi</label>
+      <textarea name="deskripsi" class="form-control" rows="3"><?php echo $data['deskripsi']; ?></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Stok</label>
+      <input type="number" name="stok" class="form-control" value="<?php echo $data['stok']; ?>" required>
+    </div>
+    <button type="submit" class="btn btn-success">Simpan</button>
+    <a href="index.php" class="btn btn-secondary">Batal</a>
+  </form>
+</div>
+</body>
+</html>
